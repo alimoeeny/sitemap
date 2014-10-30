@@ -51,7 +51,7 @@ func (item *Item) String() string {
 	return fmt.Sprintf(template, item.Loc, item.LastMod.Format("2006-01-02T15:04:05+08:00"), item.Changefreq, item.Priority)
 }
 
-func SiteMap(f string, items []*Item) error {
+func SiteMap(filepath string, items []*Item) error {
 	var buffer bytes.Buffer
 	buffer.WriteString(header)
 	for _, item := range (items) {
@@ -60,7 +60,7 @@ func SiteMap(f string, items []*Item) error {
 			return err
 		}
 	}
-	fo, err := os.Create(f)
+	fo, err := os.Create(filepath)
 	if err != nil {
 		return err
 	}
