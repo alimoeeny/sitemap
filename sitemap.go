@@ -1,13 +1,13 @@
 package sitemap
 
 import (
-	"fmt"
-	"time"
 	"bytes"
-	"io/ioutil"
 	"compress/gzip"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
+	"time"
 )
 
 const (
@@ -15,7 +15,7 @@ const (
 	<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
 	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`
-	footer = ` </urlset>`
+	footer   = ` </urlset>`
 	template = `
 	 <url>
 	   <loc>%s</loc>
@@ -42,7 +42,6 @@ type Item struct {
 	LastMod    time.Time
 	Changefreq string
 	Priority   float32
-
 }
 
 func (item *Item) String() string {
@@ -51,10 +50,19 @@ func (item *Item) String() string {
 	return fmt.Sprintf(template, item.Loc, item.LastMod.Format("2006-01-02T15:04:05+08:00"), item.Changefreq, item.Priority)
 }
 
+func SiteMapXML(items []*Item) string {
+	buffer := ""
+	buffer += header
+	for _, item := range items {
+		buffer += item.String()
+	}
+	buffer += footer
+	return buffer
+}
 func SiteMap(filepath string, items []*Item) error {
 	var buffer bytes.Buffer
 	buffer.WriteString(header)
-	for _, item := range (items) {
+	for _, item := range items {
 		_, err := buffer.WriteString(item.String())
 		if err != nil {
 			return err
